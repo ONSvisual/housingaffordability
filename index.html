@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})
+  (window,document,'script','dataLayer','GTM-MBCBVQS');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>Map title here</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet'/>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet'/>
+  <link href='https://cdn.ons.gov.uk/sixteens/a62dd01/css/main.css' rel='stylesheet'/>
+  <link href='css/global.css' rel='stylesheet'/>
+  <link href='https://onsvisual.github.io/pattern-library/dist/fontawesome/css/all.css' rel='stylesheet'/>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/chosen.css">
+
+<style>
+    body {
+		margin:0;
+		padding:0;
+		font-family: 'Open Sans', sans-serif;
+    font-size: 14px !important;
+		max-width:950px;
+		display:block;
+	}
+
+	#header{
+		height:70px;
+		width:100%
+	}
+
+	.mapboxgl-ctrl-group .mapboxgl-ctrl-compass {
+		display: none;
+	}
+
+
+
+	@media (min-width: 599px) {
+		#map {
+			height: 550px;
+			width: 100%;
+
+		}
+
+		#selectNav {
+			float:right;
+			width:285px;
+            min-width: 250px;
+			height:40px;
+			background-color:rgba(255,255,255,0.8);
+		}
+
+		#keydiv {
+			width:0px;
+			height:0px;
+
+			  display:none;
+		}
+			  #infodiv {
+					position:absolute;
+					width:290px;
+					background-color:rgba(255, 255, 255, 0.95);
+					padding-left:5px;
+					padding-right:0px;
+					z-index:1;
+					border-radius:0px;
+					right: 0px;
+					top: 0px;
+					padding-bottom:5px;
+					border:0px solid #225ea8;
+					display:none;
+				}
+				
+				.displaytextformatting{
+				 display: none;
+				 opacity: 0;
+					 font-size: 14px;
+					 color:#225EA8;
+					 margin-top:5px;
+					 background-color:#EAEAEA;
+					 padding-bottom:5px;
+					 padding-top:5px;
+					 padding-left:5px;
+					 padding-right:5px;
+					 line-height: 20px;
+					 border:0px solid #225EA8;
+				}
+				
+ 				#infodiv2 {
+					display:none;
+					width:0px;
+					height:0px;
+					opacity:0;
+				}
+ 				#infodiv {
+					display:none;
+
+				}
+				
+				.displaytextformatting2{
+				 display: none;
+				 opacity: 0;
+					 font-size: 14px;
+					 color:#225EA8;
+					 margin-top:5px;
+					 background-color:#EAEAEA;
+					 padding-bottom:5px;
+					 padding-top:5px;
+					 padding-left:5px;
+					 padding-right:5px;
+					 line-height: 20px;
+				}
+
+		#currVal {
+			font-size:14px;
+
+		}
+	}
+
+	@media (max-width: 600px) {
+
+ 				#infodiv {
+					display:none;
+					width:0px;
+					height:0px;
+					opacity:0;
+				}
+ 				#infodiv2 {
+					display:none;
+
+				}
+
+
+	    #map {
+			height: 350px;
+			width: 100%;
+			overflow:visible;
+		}
+
+
+
+		.mapboxgl-ctrl-fullscreen {
+			display:none !important;
+		}
+						.displaytextformatting2{
+				 display: none;
+				 opacity: 0;
+					 font-size: 14px;
+					 color:#225EA8;
+					 margin-top:5px;
+					 background-color:#EAEAEA;
+					 padding-bottom:5px;
+					 padding-top:5px;
+					 padding-left:5px;
+					 padding-right:5px;
+					 line-height: 20px;
+				}
+	}
+
+  .btnEnable {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      width: 40px;
+      height: 40px;
+      border: none;
+      padding: 0px 0!important;
+      background-color: #0075A3;
+      font: 700 16px Arial;
+      color: #FFF;
+      filter: inherit;
+      -webkit-appearance: button;
+      cursor: pointer;
+  }
+  #pcText {
+  			width: 100%;
+  			height:40px;
+  			/* padding: 3px; */
+        /* padding-bottom: 10px; */
+  			color: #999999;
+        font-size: 14px;
+        box-sizing: border-box;
+        border:1px solid #f93;
+  }
+
+  #pcText:focus{
+    border:1px solid #36add9
+  }
+
+
+    h6 {
+        font-size: 14px;
+        font-weight: 700;
+        margin: 16px 0 0 0;
+        color:#323132!important;
+    }
+   .btn--primary {
+     background-color: #0F8243;
+     color: #fff!important;
+   }
+   .btn {
+       font-family: "Open Sans",Helvetica,Arial,sans-serif;
+       font-weight: 400;
+       font-size: 14px;
+       display: inline-block;
+       width: auto;
+       cursor: pointer;
+       padding: 6px 16px 10px 16px;
+       border: 0 none;
+       text-align: center;
+       -webkit-appearance: none;
+       transition: background-color 0.25s ease-out;
+       line-height: 24px;
+   }
+   a {
+       text-decoration: underline;
+       color: #206095;
+       word-wrap: break-word;
+   }
+
+ 
+   .answernumber{
+	   font-weight:bold;
+	   font-size:20px;
+	   margin-bottom:0px;
+	}
+
+   #smallareareadout {font-size: 14px; color:#225EA8;}
+   #areareadout {font-size: 14px;color:#225EA8;}
+   #housepricereadout {font-size: 18px;color:#225EA8;}
+   #yourincomereadout {font-size: 18px;color:#225EA8;}
+   #averageincomereadout {font-size: 18px;color:#225EA8;}
+   #yourdepositreadout {font-size: 18px;color:#225EA8; margin-top:10px;}
+   #depositreadout {font-size: 14px;color:#225EA8;}
+   #stampdutyreadout {font-size: 14px;color:#225EA8;}
+   #ratioreadout {}
+   
+   
+   .answernumber2{
+	   font-weight:bold;
+	   font-size:20px;
+	   margin-bottom:0px;
+	}
+
+   #smallareareadout2 {font-size: 14px; color:#225EA8;}
+   #areareadout2 {font-size: 14px;color:#225EA8;}
+   #housepricereadout2 {font-size: 18px;color:#225EA8;}
+   #yourincomereadout2 {font-size: 18px;color:#225EA8;}
+   #averageincomereadout2 {font-size: 18px;color:#225EA8;}
+   #yourdepositreadout2 {font-size: 18px;color:#225EA8; margin-top:10px;}
+   #depositreadout2 {font-size: 14px;color:#225EA8;}
+   #stampdutyreadout2 {font-size: 14px;color:#225EA8;}
+   #ratioreadout2 {}
+
+	.footnote{
+		margin-top:10px;
+		color: #5F7682;
+		font-size:14px;
+	
+	}
+
+
+    .clearable{
+      background: #fff url(./images/closeblue.svg) no-repeat right -15px center;
+      background-size: 15px 24px;
+      transition: background 0.4s;
+    }
+    .clearable.x  { background-position: right 10px center; } /* (jQ) Show icon */
+    .clearable.onX{ cursor: pointer; }              /* (jQ) hover cursor style */
+    .clearable::-ms-clear {display: none; width:0; height:0;} /* Remove IE default X */
+
+    .details__summary {
+        color:#fff;
+
+    }
+
+	
+	#custombutton:hover {
+		cursor:pointer;
+		cursor:hand;
+	}
+	
+
+	
+	.legendentry{
+		float:left;
+		width:20%;
+		text-align:center;
+		color:#323132;	
+	}
+	.legendblock{
+		width:15%;
+		float:left;
+		height:12px;
+		box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+    	-webkit-box-sizing: border-box;
+    	border: 1px solid #fff;
+	}
+	
+	#legendwrapper{
+		font-size:12px;
+		width:320px;
+		height:90px;
+		float:left;
+	}
+	
+	.optionbutton{
+		background-color:#dadada;
+		height:38px;
+		color:#666;
+		width:140px;
+		font-weight:bold;
+		text-align:center;
+		padding-top:5px;
+		box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+    	-webkit-box-sizing: border-box;
+    	border: 2px solid #fff;
+		float:left;
+	}
+	.optionbutton:hover {
+		background-color:#206095;
+		cursor:pointer;
+		cursor:hand;
+		color:white;
+	}
+	
+	.selectedbutton{
+		background-color:#206095;
+		border: 2px solid #FF9933;
+		color:white;
+	}
+	
+	.selectedbutton:hover{
+		background-color:#206095;
+	}
+
+
+</style>
+
+</head>
+<body>
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBCBVQS" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  
+ <div id="topStuff" style="max-width:950px;">
+ 
+ 
+     
+    <div id='selectNav'>
+    <div style="width:100%; font-weight:bold;">Type a postcode <span style="font-weight:normal;">(eg. PO15 5RR)</span></div>
+    <div class="input-group">
+        <input type="text" style="" class="search-control clearable" placeholder="Enter a postcode">
+        <div class="input-group-addon search-group">
+            <button id="submitPost" type="submit" style="background: none;border:0;">
+              <span class="visuallyhidden">Postcode search</span>
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+    </div>
+  </div>
+  
+<div id="infodiv2">
+    <p id="nostatsmessage2" style="display:none;">Sorry, there weren't enough sales of your selected property type in this area to be able to calculate statistics. Please select a different property type.</p>
+    
+    <div id="successfulstats2">
+        <div class="displaytextformatting2">
+            <p style="">In <span id="smallareareadout2">your area</span>, <span id="areareadout2">your area</span><span id="measureofhouseprice2">, an average</span> <span id="propertytype2"></span> costs:</p> 
+            <p class="answernumber2"><span id="housepricereadout2"></span></p>
+        </div>
+                    
+        <div class="displaytextformatting2">
+            <p>To buy with a mortgage, you would need an annual household income of:</p>
+            <p class="answernumber2"><span id="yourincomereadout2"></span></p>
+        </div>
+                    
+        <div class="displaytextformatting2">
+            <p>You would also need savings of:</p>
+            <p style="margin-bottom:10px;"><span id="yourdepositreadout2"></span></p>
+            <p>That is <span id="depositreadout2"></span> for a <span id="depositnumber2">10</span>% deposit<span id="additionalincomereadout2" style="font-weight:bold;"></span><span id="additionalextratext2"></span> and <span id="stampdutyreadout2"></span> stamp duty.</p>
+        </div>
+    </div><!--close successfulstats2-->
+</div><!--close infoDiv2-->
+
+<div id="legendwrapper"> 
+
+				<div style="color:#323132; font-size:14px;">House price to income ratio*<span style="font-weight:bold;" id="ratioreadout"></span></div>
+
+				<div id="simplelegend" style="width:100%; margin-bottom:40px;">
+                	<div class="legendentry legendentry0" style="float:left; width:15%; text-align:center;"></div>
+                    <div class="legendentry legendentry1" style="float:left; width:15%; text-align:center;"></div>
+                    <div class="legendentry legendentry2" style="float:left; width:15%; text-align:center;"></div>
+                    <div class="legendentry legendentry3" style="float:left; width:15%; text-align:center;"></div>
+                    <div class="legendentry legendentry4" style="float:left; width:15%; text-align:center;"></div>
+                    <div class="legendentry legendentry5" style="float:left; width:15%; text-align:center; margin-left:5%;">No data</div>
+                    
+                    <div class="legendblock legendblock0" style="background-color:#fff;"></div>
+                    <div class="legendblock legendblock1" style="background-color:#fff;"></div>
+                    <div class="legendblock legendblock2" style="background-color:#fff;"></div>
+                    <div class="legendblock legendblock3" style="background-color:#fff;"></div>
+                    <div class="legendblock legendblock4" style="background-color:#fff;"></div>
+                    <div class="legendblock legendblock5" style="background-color:grey; margin-left:5%;"></div>
+                    
+                    <div style="width:75%; height:10px;">
+                    	<p style="width:120px; float:left;">&#x2190;More affordable</p>
+                        <p style="width:120px; float:left; text-align:right;">Less affordable&#x2192;</p>
+                    </div>
+
+                    
+
+                </div>
+            </div>
+            
+            <div style="clear:both;"></div>
+            
+
+  
+  </div><!--close topStuff-->
+
+
+<div id='map'>
+    <!--    
+    ︱︱︱︱ ︱︱︱︱ ︱︱︱ ︱︱︱︱ ︱︱︱︱ ┏┓︱   ︱︱︱︱ ︱︱ ︱︱︱︱ ︱︱︱︱︱︱
+    ︱︱︱︱ ︱︱︱︱ ︱︱︱ ︱︱︱︱ ︱︱︱︱ ┃┃︱   ︱︱︱︱ ︱︱ ︱︱︱︱ ︱︱︱︱︱︱
+    ┏━┓︱ ┏━━┓ ┏━┓ ┏┓┏┓ ┏━━┓ ┃┃︱   ┏┓┏┓ ┏┓ ┏━━┓ ┏┓┏┓┏┓
+    ┃┏┓┓ ┃┏┓┃ ┃┏┛ ┃┗┛┃ ┃┏┓┃ ┃┃︱   ┃┗┛┃ ┣┫ ┃┃━┫ ┃┗┛┗┛┃
+    ┃┃┃┃ ┃┗┛┃ ┃┃︱ ┃┃┃┃ ┃┏┓┃ ┃┗┓   ┗┓┏┛ ┃┃ ┃┃━┫ ┗┓┏┓┏┛
+    ┗┛┗┛ ┗━━┛ ┗┛︱ ┗┻┻┛ ┗┛┗┛ ┗━┛   ︱┗┛︱ ┗┛ ┗━━┛ ︱┗┛┗┛︱    -->
+        
+    <div id="infodiv">
+        <p id="nostatsmessage" style="display:none;">Sorry, there weren't enough sales of your selected property type in this area to be able to calculate statistics. Please select a different property type.</p>
+        
+        <div id="successfulstats">
+            <div class="displaytextformatting">
+                <p style="">In <span id="smallareareadout">your area</span>, <span id="areareadout">your area</span><span id="measureofhouseprice">, an average</span> <span id="propertytype"></span> costs:</p> 
+                <p class="answernumber"><span id="housepricereadout"></span></p>
+            </div>
+                        
+            <div class="displaytextformatting">
+                <p>To buy with a mortgage, you would need an annual household income of:</p>
+                <p class="answernumber"><span id="yourincomereadout"></span></p>
+            </div>
+                        
+            <div class="displaytextformatting">
+                <p>You would also need savings of:</p>
+                <p style="margin-bottom:10px;"><span id="yourdepositreadout"></span></p>
+                <p>That is <span id="depositreadout"></span> for a <span id="depositnumber">10</span>% deposit<span id="additionalincomereadout" style="font-weight:bold;"></span><span id="additionalextratext"></span> and <span id="stampdutyreadout"></span> stamp duty.</p>
+            </div>
+        </div><!--close successfulstats-->
+    </div><!--close infoDiv-->
+</div><!--close map-->
+
+<p style="margin-top:15px;">*The house price to income ratio is an area's average house price divided by its average household income. The higher the number, the less affordable an area is.</p>
+<!--<p style="margin-top:15px;">The figures in this calculator are based on some assumptions. By changing these, you can tailor the statistics to your circumstances to get a better idea of whether an area might be affordable for you. We do not collect or share any of this information.</p>-->
+
+
+
+
+
+
+
+
+<div id="custombutton" style="text-decoration:underline;"><span id="customtwistytriangle" style="width:16px;">&#9654; </span>Edit default settings to better fit your circumstances</div>
+ 
+<!-- 
+︱︱︱︱ ︱︱︱︱ ︱︱︱︱ ︱┏┓︱ ︱︱︱︱ ︱︱︱︱   ︱︱︱︱ ︱︱ ︱︱︱︱ ︱︱︱︱︱︱
+︱︱︱︱ ︱︱︱︱ ︱︱︱︱ ┏┛┗┓ ︱︱︱︱ ︱︱︱︱   ︱︱︱︱ ︱︱ ︱︱︱︱ ︱︱︱︱︱︱
+┏━━┓ ┏┓┏┓ ┏━━┓ ┗┓┏┛ ┏━━┓ ┏┓┏┓   ┏┓┏┓ ┏┓ ┏━━┓ ┏┓┏┓┏┓
+┃┏━┛ ┃┃┃┃ ┃━━┫ ︱┃┃︱ ┃┏┓┃ ┃┗┛┃   ┃┗┛┃ ┣┫ ┃┃━┫ ┃┗┛┗┛┃
+┃┗━┓ ┃┗┛┃ ┣━━┃ ︱┃┗┓ ┃┗┛┃ ┃┃┃┃   ┗┓┏┛ ┃┃ ┃┃━┫ ┗┓┏┓┏┛
+┗━━┛ ┗━━┛ ┗━━┛ ︱┗━┛ ┗━━┛ ┗┻┻┛   ︱┗┛︱ ┗┛ ┗━━┛ ︱┗┛┗┛︱-->
+ 
+<div id="customscreen" style="display:none;">
+
+
+
+<p style="clear:both; margin-top:20px; font-weight:bold;">Are you a first time buyer?</p>
+<p>If you are buying a property in England for the first time, you do not pay any stamp duty land tax on properties up to £300,000 and 5% on the portion from £300,001 to £500,000. If you have bought a property before or are buying in Wales, you will pay the regular rates which differ between England and Wales.</p>
+	<div style="width:100%; min-height:50px;">
+    	<div class="optionbutton optionbutton-ftb selectedbutton no-ft">No</div>
+        <div class="optionbutton optionbutton-ftb ys-ft">Yes</div>
+	</div>
+<p style="clear:both; margin-top:20px; font-weight:bold;">The price point of your desired property</p>
+<p>For any given area, there will be a range of properties that sell for different prices. Choose the average (median) price, an entry level (lower quartile) price or a low priced (tenth percentile) property in a selected area.</p>
+    <div style="width:100%; min-height:50px;">
+        <div class="optionbutton optionbutton-prc selectedbutton av-pr">Average price</div>
+        <div class="optionbutton optionbutton-prc lq-pr">Entry level price</div>
+        <div class="optionbutton optionbutton-prc tp-pr">Low price</div>
+    </div>
+
+<p style="clear:both; margin-top:20px; font-weight:bold;">The type of property you want to purchase</p>
+<p>Different types of property vary in price. Look at all properties, or select the type you would like to purchase.</p>
+	<div style="width:100%; min-height:50px;">
+        <div class="optionbutton optionbutton-typ selectedbutton al-pr">All proprties</div>
+        <div class="optionbutton optionbutton-typ dt-pr">Detached</div>
+        <div class="optionbutton optionbutton-typ sm-pr">Semi-detached</div>
+        <div class="optionbutton optionbutton-typ tr-pr">Terraced</div>
+        <div class="optionbutton optionbutton-typ fl-pr">Flats</div>
+	</div>
+    
+<p style="clear:both; margin-top:20px; font-weight:bold;">How much a lender is willing to lend you (as a multiple of your household income)</p>
+<p>Mortgage lenders will typically offer first time buyers around four and a half times their income as a total mortgage amount, although this can vary with your circumstances. Levels of debt, numbers of dependant children, the nature of your employment, whether you have purchased property before and economic conditions can all influence the amount lenders will offer.</p>
+<input type="number" class="custom-control" id="lendingmultiplier" placeholder="4.5" min="1" max="10" style="width:150px">
+
+<p style="clear:both; margin-top:20px; font-weight:bold;">The deposit amount you want to save (as a percentage of property price)</p>
+<p>To bring down repayments, decrease your mortgage term or both, you may want to save a larger deposit. Alternatively, you can opt to pay a smaller deposit, but this will need to be offset with higher mortgage repayments or a longer mortgage term, and may decrease the amount lenders will offer you. </p>
+<input type="number" class="custom-control" id="depositpercentage" placeholder="10" min="5" max="90" style="width:150px">
+
+<p style="clear:both; margin-top:20px; font-weight:bold;">Other costs associated with moving (£) </p>
+<p>Here you can add costs associated with moving or buying a property like conveyancing fees, moving costs, essential furnishings and insurance among other things. This will be added to the savings you will need to buy in a given area to give a more realistic figure.</p>
+<input type="number" class="custom-control" id="associatedcosts" placeholder="0" min="0" max="100000" style="width:150px">
+ 
+</div><!--close customcreen-->
+
+
+<h6>Source: Office for National Statistics – House Price Statistics for Small Areas, HM Land Registry – Price Paid Data</h6>
+
+
+<!--<p class="footnote">* Assuming you are a first time buyer. <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates">See here how stamp duty is calculated</a>.</p>-->
+<!--<p class="footnote">* Entry level property price referst to the lower quartile house price (the price mid-way between the cheapest property and the average priced property).</p>-->
+
+<!-- <h6>Download the data</h6>
+<a class="btn btn--primary"  href="fallback.png" download>Image</a>
+<a class="btn btn--primary"  href="datadownload.xlsx">.xlsx</a>
+<a class="btn btn--primary"  href="datadownload.csv">.csv</a>
+</div>-->
+<!--<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>-->
+
+<script src="https://cdn.ons.gov.uk/vendor/d3/4.2.7/d3.min.js"></script>
+<!-- <script src="js/topojson.v2.min.js"></script> -->
+<!-- <script src="js/simple-statistics.min.js"></script> -->
+<script src="js/modernizr.min.js"></script>
+<script src="js/d3-queue.min.js"></script>
+<script src="js/colorbrewer.js"></script>
+<script src="https://cdn.ons.gov.uk/vendor/jquery/2.1.4/jquery.min.js"></script>
+<script src="js/chosen.jquery.js"></script>
+<script src="js/limit.js"></script>
+<script src="https://cdn.ons.gov.uk/vendor/pym/1.3.2/pym.min.js"></script>
+
+
+
+<!--<script src='js/mapbox-gl.js'></script>-->
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+
+<script src="js/script.js"></script>
+
+<noscript>
+	<p>Your browser does not support JavaScript. If you're able to please enable Javascript to view the map.</p>
+</noscript>
+
+</body>
+</html>
