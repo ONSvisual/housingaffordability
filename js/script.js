@@ -48,10 +48,10 @@ if(Modernizr.webgl) {
 		  attributionControl: false
 		});
 		//add fullscreen option
-		map.addControl(new mapboxgl.FullscreenControl(), 'bottom-left');
+		map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
 
 		// Add zoom and rotation controls to the map.
-		map.addControl(new mapboxgl.NavigationControl(), 'bottom-left');
+		map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 		
 		//move attribution
 		//map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
@@ -132,19 +132,58 @@ if(Modernizr.webgl) {
 				
 				];
 				
+				
+				
 				map.addLayer({
 					"id": "msoa-outlines",
 					"type": "fill",
 					"source": {
 						"type": "vector",
-						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t22/boundaries/{z}/{x}/{y}.pbf"],
-						//"tiles":  ["https://cdn.ons.gov.uk/maptiles/t16/{z}/{x}/{y}.pbf"],
-						"minzoom": 10
+						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t25/boundaries/{z}/{x}/{y}.pbf"]
 					},
 					"source-layer": "boundaries",
+					"minzoom":9,
+					"maxzoom":20,
 					"layout": {},
 					'paint': {
 							'fill-opacity':0.2,
+							'fill-outline-color':'rgba(0,0,0,0)',
+							'fill-color': R
+							// 'fill-color': {
+							// 		// Refers to the data of that specific property of the polygon
+							// 	'property': "a_median",
+							// 	'default': '#666666',
+							// 	// Prevents interpolation of colors between stops
+							// 	'base': 0,
+							//
+							// 	'stops': [
+							// 		[0, '#15534C'],
+							// 		[1, '#15534C'],
+							// 		[2, '#30785B'],
+							// 		[3, '#5D9D61'],
+							// 		[9, '#99C160'],
+							// 		[15, '#E2E062']
+							//
+							// 	]
+
+
+						}
+				});			
+
+
+				map.addLayer({
+					"id": "msoa-outlines2",
+					"type": "fill",
+					"source": {
+						"type": "vector",
+						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t25/boundaries/{z}/{x}/{y}.pbf"]
+					},
+					"source-layer": "boundaries",
+					"minzoom":4,
+					"maxzoom":9,
+					"layout": {},
+					'paint': {
+							'fill-opacity':0.5,
 							'fill-outline-color':'rgba(0,0,0,0)',
 							'fill-color': R
 							// 'fill-color': {
@@ -175,7 +214,7 @@ if(Modernizr.webgl) {
 					"source": {
 						"type": "vector",
 						//"tiles": ["https://cdn.ons.gov.uk/maptiles/t17/{z}/{x}/{y}.pbf"],
-						"tiles": ["https://cdn.ons.gov.uk/maptiles/t22/tiles/{z}/{x}/{y}.pbf"],
+						"tiles": ["https://cdn.ons.gov.uk/maptiles/t25/tiles/{z}/{x}/{y}.pbf"],
 						"minzoom": 4
 					},
 					"source-layer": "houseprices",
@@ -210,11 +249,29 @@ if(Modernizr.webgl) {
 					"type": "line",
 					"source": {
 						"type": "vector",
-						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t22/boundaries/{z}/{x}/{y}.pbf"],
-						//"tiles":  ["https://cdn.ons.gov.uk/maptiles/t16/{z}/{x}/{y}.pbf"],
-						"minzoom": 10
+						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t25/boundaries/{z}/{x}/{y}.pbf"]
 					},
 					"source-layer": "boundaries",
+					"minzoom":9,
+					"maxzoom":20,
+					"layout": {},
+					"paint": {
+						"line-color": "#FF9933",
+						"line-width": 3
+					},
+					"filter": ["==", "msoa11cd", ""]
+				});	
+				
+				map.addLayer({
+					"id": "msoa-outlines2-hover",
+					"type": "line",
+					"source": {
+						"type": "vector",
+						"tiles":  ["https://cdn.ons.gov.uk/maptiles/t25/boundaries/{z}/{x}/{y}.pbf"]
+					},
+					"source-layer": "boundaries",
+					"minzoom":4,
+					"maxzoom":9,
 					"layout": {},
 					"paint": {
 						"line-color": "#FF9933",
@@ -260,14 +317,17 @@ if(Modernizr.webgl) {
 
 			//Highlight stroke on mouseover (and show area information)
 			map.on("mousemove", "msoa-outlines", onMove);
+			map.on("mousemove", "msoa-outlines2", onMove);
 
 			// Reset the msoa-fills-hover layer's filter when the mouse leaves the layer.
 			map.on("mouseleave", "msoa-outlines", onLeave);
+			map.on("mouseleave", "msoa-outlines2", onLeave);
 
 			map.getCanvasContainer().style.cursor = 'pointer';
 
 			//Add click event
 			map.on('click', 'msoa-outlines', onClick);
+			map.on('click', 'msoa-outlines2', onClick);
 
 			//get location on click
 			d3.select(".mapboxgl-ctrl-geolocate").on("click", geolocate);
@@ -278,6 +338,7 @@ if(Modernizr.webgl) {
 })
 
 		$(".search-control").click(function() {
+			d3.select(".search-control").style("text-transform", "uppercase");
 			$(".search-control").val('')
 		})
 
@@ -321,12 +382,21 @@ if(Modernizr.webgl) {
 
 				if(newmsoa11cd != oldmsoa11cd) {
 					oldmsoa11cd = e.features[0].properties.msoa11cd;
-					map.setFilter("msoa-outlines-hover", ["==", "msoa11cd", e.features[0].properties.msoa11cd]);
+					
+					if(map.getZoom() <= 9 ){
+						console.log("zoomed in "+map.getZoom())
+						map.setFilter("msoa-outlines2-hover", ["==", "msoa11cd", e.features[0].properties.msoa11cd]);
+						features = map.queryRenderedFeatures(e.point,{layers: ['msoa-outlines2']});
+					} else {
+						console.log("zoomed out "+map.getZoom())
+							map.setFilter("msoa-outlines-hover", ["==", "msoa11cd", e.features[0].properties.msoa11cd]);
+							features = map.queryRenderedFeatures(e.point,{layers: ['msoa-outlines']});
+					}
 
 					// selectArea(e.features[0].properties.msoa11cd);
 
 
-				    features = map.queryRenderedFeatures(e.point,{layers: ['msoa-outlines']});
+				    
 				 	if(features.length != 0){
 
 						setAxisVal(features, features[0].properties.msoa11nm, features[0].properties["a_median"]);
@@ -566,6 +636,8 @@ if(Modernizr.webgl) {
 	};
 
 	function populatecalculator(features) {
+		
+		console.log(features)
 	
 		//build the custom variable we want to return for the user
 		var returnbuilt = propertytype+"_"+pricepoint;
@@ -645,6 +717,7 @@ if(Modernizr.webgl) {
 		//stamp duty stuff
 		lacodeget = features[0].properties.LAcode;
         englandorwales = lacodeget.charAt(0);
+		
 		
 		//first if the area is english
 		if(englandorwales == "E"){
@@ -816,14 +889,16 @@ if(Modernizr.webgl) {
 	var addittionalcosts = 0;
 	
 	
+	
 	//first time buyer
 	d3.selectAll(".optionbutton-ftb").on("click",function(){
 		d3.selectAll(".optionbutton-ftb").classed("selectedbutton",false);
 		d3.select(this).classed("selectedbutton",true);
 		
-		if(d3.select(this).classed("ys-ft") == true){firsttimebuyer = true; customchangemade(); }
-		else if(d3.select(this).classed("no-ft") == true){firsttimebuyer = false; customchangemade(); }
+		if(d3.select(this).classed("ys-ft") == true){firsttimebuyer = true; customchangemade();d3.select("#asftb").text(" as a first time buyer"); d3.select("#asftb2").text(" as a first time buyer"); }
+		else if(d3.select(this).classed("no-ft") == true){firsttimebuyer = false; customchangemade(); d3.select("#asftb").text(""); d3.select("#asftb2").text(""); }
 	})
+	
 	
 	//price points
 	d3.selectAll(".optionbutton-prc").on("click",function(){

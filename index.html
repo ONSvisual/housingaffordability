@@ -339,6 +339,22 @@
 		background-color:#206095;
 	}
 
+	::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	  text-transform: none !important;
+	}
+	::-moz-placeholder { /* Firefox 19+ */
+	  text-transform: none !important;
+	}
+	:-ms-input-placeholder { /* IE 10+ */
+	  text-transform: none !important;
+	}
+	:-moz-placeholder { /* Firefox 18- */
+	  text-transform: none !important;
+	}
+	
+	.search-control {
+	  text-transform: uppercase;
+	}
 
 </style>
 
@@ -375,14 +391,14 @@
         </div>
                     
         <div class="displaytextformatting2">
-            <p>To buy with a mortgage, you would need an annual household income of:</p>
+            <p>To buy with a mortgage, you would need a gross annual household income of:</p>
             <p class="answernumber2"><span id="yourincomereadout2"></span></p>
         </div>
                     
         <div class="displaytextformatting2">
             <p>You would also need savings of:</p>
             <p style="margin-bottom:10px;"><span id="yourdepositreadout2"></span></p>
-            <p>That is <span id="depositreadout2"></span> for a <span id="depositnumber2">10</span>% deposit<span id="additionalincomereadout2" style="font-weight:bold;"></span><span id="additionalextratext2"></span> and <span id="stampdutyreadout2"></span> stamp duty.</p>
+            <p>That is <span id="depositreadout2"></span> for a <span id="depositnumber2">10</span>% deposit<span id="additionalincomereadout2" style="font-weight:bold;"></span><span id="additionalextratext2"></span> and <span id="stampdutyreadout2"></span> stamp duty <span id="asftb2"></span>.</p>
         </div>
     </div><!--close successfulstats2-->
 </div><!--close infoDiv2-->
@@ -442,20 +458,20 @@
             </div>
                         
             <div class="displaytextformatting">
-                <p>To buy with a mortgage, you would need an annual household income of:</p>
+                <p>To buy with a mortgage, you would need a gross annual household income of:</p>
                 <p class="answernumber"><span id="yourincomereadout"></span></p>
             </div>
                         
             <div class="displaytextformatting">
                 <p>You would also need savings of:</p>
                 <p style="margin-bottom:10px;"><span id="yourdepositreadout"></span></p>
-                <p>That is <span id="depositreadout"></span> for a <span id="depositnumber">10</span>% deposit<span id="additionalincomereadout" style="font-weight:bold;"></span><span id="additionalextratext"></span> and <span id="stampdutyreadout"></span> stamp duty.</p>
+                <p>That is <span id="depositreadout"></span> for a <span id="depositnumber">10</span>% deposit<span id="additionalincomereadout" style="font-weight:bold;"></span><span id="additionalextratext"></span> and <span id="stampdutyreadout"></span> stamp duty<span id="asftb"></span>.</p>
             </div>
         </div><!--close successfulstats-->
     </div><!--close infoDiv-->
 </div><!--close map-->
 
-<p style="margin-top:15px;">*The house price to income ratio is an area's average house price divided by its average household income. The higher the number, the less affordable an area is.</p>
+<p style="margin-top:15px;">*The house price to income ratio is an area's average house price divided by its average net household income. The higher the number, the less affordable an area is.</p>
 <!--<p style="margin-top:15px;">The figures in this calculator are based on some assumptions. By changing these, you can tailor the statistics to your circumstances to get a better idea of whether an area might be affordable for you. We do not collect or share any of this information.</p>-->
 
 
@@ -496,7 +512,7 @@
 <p style="clear:both; margin-top:20px; font-weight:bold;">The type of property you want to purchase</p>
 <p>Different types of property vary in price. Look at all properties, or select the type you would like to purchase.</p>
 	<div style="width:100%; min-height:50px;">
-        <div class="optionbutton optionbutton-typ selectedbutton al-pr">All proprties</div>
+        <div class="optionbutton optionbutton-typ selectedbutton al-pr">All properties</div>
         <div class="optionbutton optionbutton-typ dt-pr">Detached</div>
         <div class="optionbutton optionbutton-typ sm-pr">Semi-detached</div>
         <div class="optionbutton optionbutton-typ tr-pr">Terraced</div>
